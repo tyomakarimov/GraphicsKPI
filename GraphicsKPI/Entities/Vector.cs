@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GraphicsKPI.Entites
+﻿namespace GraphicsKPI.Entities
 {
     internal class Vector
     {
-        public double x;
-        public double y;
-        public double z;
-        public double modulus;
+        public readonly double x;
+        public readonly double y;
+        public readonly double z;
+        public readonly double modulus;
 
         public Vector(double x, double y, double z)
         {
