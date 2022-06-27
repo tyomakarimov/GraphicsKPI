@@ -1,6 +1,7 @@
 ﻿using GraphicsKPI.Types;
 using GraphicsKPI.GeometricObjects;
 using GraphicsKPI.Scene;
+using GraphicsKPI.Utilities;
 
 namespace GraphicsKPI
 {
@@ -23,31 +24,33 @@ namespace GraphicsKPI
                 }
             }
 
-            Console.WriteLine(sourceFileName);
-            Console.WriteLine(outputFileName);
 
-            /*Point screenCenter = new Point(-15, 15, -5);
-            Screen screen = new Screen(screenCenter, 30, 30);
+            Point screenCenter = new Point(-15, 15, 7);
+            Screen screen = new Screen(screenCenter, 300, 300);
 
-            Sphere sphere = new Sphere(new Point(-15, 16, 2), 9);
+            Color[,] data = new Color[300, 300];
+
+            Sphere sphere = new Sphere(new Point(-70, 20, 2), 50);
             Light light = new Light(new Vector(38, 15, 60));
             //Light light = new Light(new Vector(2, -3, -1));
             Camera camera = new Camera(new Point(20, 10, 15));
             //Triangle triangle = new Triangle(new Point(-10, 5, -2), new Point(-10, 20, -2), new Point(-10, 12, 12));
 
-            Tracer tracer = new Tracer(camera, light, screen);
-            double t = 0.0;
-            Vector test = (screenCenter - new Point(20, 10, 15)).Normalize();
-
-            Point origin = new Point(20, 10, 15);
-            Ray testRay = new Ray(origin, test);
-            Console.WriteLine(test);
-            sphere.CheckIntersectionWith(testRay, ref t);
-            Console.WriteLine(testRay.GetPointByT(t));
-            Console.WriteLine(Math.Round(testRay.GetPointByT(t).z, 2));
+            //Tracer tracer = new Tracer(camera, light, screen);
             //tracer.AddFigureToList(sphere);
             //tracer.AddFigureToList(triangle);
-            //tracer.render();*/
+            //tracer.render(data);
+            //PpmFileWriter.WriteToFile(outputFileName, data).Wait();
+
+            List<Point> vertexes = new List<Point>();
+            List<Vector> normals = new List<Vector>();
+            List<Triangle> triangles = new List<Triangle>();
+
+            List<List<(int, int)>> triangleIndexes = new List<List<(int, int)>>();
+
+            ObjFileParser.ParseObjFile(sourceFileName, vertexes, normals, triangleIndexes).Wait();
+
+            Console.WriteLine(triangleIndexes.Count());
 
         }
     }

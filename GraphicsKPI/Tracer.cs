@@ -20,6 +20,7 @@ namespace GraphicsKPI
             _light = light;
             _screen = screen;
             _figureList = new List<IFigure>();
+            _backgroundColor = new Color(204, 153, 255);
         }
 
         public void AddFigureToList(IFigure figure)
@@ -27,57 +28,31 @@ namespace GraphicsKPI
             _figureList.Add(figure);
         }
 
-        public char CalcCharacter(Vector normal)
+        public Color CalcColor(Vector normal)
         {
-            var result = _light.direction.Dot(normal);
-            char character;
-            if (result > 0.8f)
-            {
-                character = '#';
-            } else if (result > 0.5f)
-            {
-                character = 'O';
-            } else if (result > 0.2f)
-            {
-                character = '*';
-            } else if (result > 0f)
-            {
-                character = '.';
-            } else
-            {
-                character = ' ';
-            };
-            return character;
+            var scalarMult = Math.Max(_light.direction.Dot(normal), 0.0);
+            var result = (int)Math.Ceiling(255 * scalarMult);
+            return new Color(result, result, result);
         }
         
-        public void render()
+        public void render(Color[,] matrix)
         {
             Point origin = _camera._location;
-            char[,] charList = new char[_screen.Width, _screen.Height];
 
             if (_figureList.Count == 1)
             {
-                ProcessSingleObject(origin, charList);
+                ProcessSingleObject(origin, matrix);
             } else if (_figureList.Count > 1)
             {
-                ProcessMultipleObjects(origin, charList);
+                ProcessMultipleObjects(origin, matrix);
             } else
             {
                 Console.WriteLine("You didn`t add any figures on the scene to render");
                 return;
             }
-
-            for (int x = 0; x < _screen.Width; x++)
-            {
-                for (int y = 0; y < _screen.Height; y++)
-                {
-                    Console.Write(charList[x, y] + " ");
-                }
-                Console.Write("\n");
-            }
         }
 
-        public void ProcessSingleObject(Point origin, char[,] charList)
+        public void ProcessSingleObject(Point origin, Color[,] matrix)
         {
             IFigure obj = _figureList[0];
             for (int x = 0; x < _screen.Width; x++)
@@ -93,17 +68,17 @@ namespace GraphicsKPI
                     {
                         Point intersectionPoint = ray.GetPointByT(tval);
                         Vector normal = obj.GetNormalAtPoint(intersectionPoint);
-                        charList[x, y] = CalcCharacter(normal);
+                        matrix[x, y] = CalcColor(normal);
                     }
                     else
                     {
-                        charList[x, y] = '-';
+                        matrix[x, y] = _backgroundColor;
                     }
                 }
             }
         }
 
-        public void ProcessMultipleObjects(Point origin, char[,] charList)
+        public void ProcessMultipleObjects(Point origin, Color[,] matrix)
         {
             for (int x = 0; x < _screen.Width; x++)
             {
@@ -134,10 +109,10 @@ namespace GraphicsKPI
                     {
                         Point intersectionPoint = ray.GetPointByT(tval);
                         Vector normal = closestObj.GetNormalAtPoint(intersectionPoint);
-                        charList[x, y] = CalcCharacter(normal);
+                        matrix[x, y] = CalcColor(normal);
                     } else
                     {
-                        charList[x, y] = '-';
+                        matrix[x, y] = _backgroundColor;
                     }
 
                 }
