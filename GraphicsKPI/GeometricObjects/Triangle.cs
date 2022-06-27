@@ -61,5 +61,10 @@ namespace GraphicsKPI.GeometricObjects
             return edge1.CrossProduct(edge2).Normalize();
         }
 
+        public override string ToString()
+        {
+            return "Triangle";
+        }
+
     }
 }

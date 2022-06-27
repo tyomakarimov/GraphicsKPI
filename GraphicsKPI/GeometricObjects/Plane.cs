@@ -22,7 +22,7 @@ namespace GraphicsKPI.GeometricObjects
         public bool CheckIntersectionWith(Ray ray, ref double t)
         {
             double denom = _normal.Dot(ray.direction);
-            if (Math.Abs(denom) > 1e-6)
+            if (Math.Abs(denom) > 0.0001f)
             {
                 t = (_center - ray.origin).Dot(_normal) / denom;
                 if (t >= 0) return true;

@@ -55,5 +55,10 @@
         {
             return new Vector(x / abs, y / abs, z / abs);
         }
+
+        public override string ToString()
+        {
+            return "(" + x + ";" + y + ";" + z + ")";
+        }
     }
 }

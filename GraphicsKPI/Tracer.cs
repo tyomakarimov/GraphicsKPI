@@ -57,10 +57,10 @@ namespace GraphicsKPI
 
             if (_figureList.Count == 1)
             {
-                processSingleObject(origin, charList);
+                ProcessSingleObject(origin, charList);
             } else if (_figureList.Count > 1)
             {
-                processMultipleObjects(origin, charList);
+                ProcessMultipleObjects(origin, charList);
             } else
             {
                 Console.WriteLine("You didn`t add any figures on the scene to render");
@@ -77,7 +77,7 @@ namespace GraphicsKPI
             }
         }
 
-        private void processSingleObject(Point origin, char[,] charList)
+        public void ProcessSingleObject(Point origin, char[,] charList)
         {
             IFigure obj = _figureList[0];
             for (int x = 0; x < _screen.Width; x++)
@@ -103,7 +103,7 @@ namespace GraphicsKPI
             }
         }
 
-        private void processMultipleObjects(Point origin, char[,] charList)
+        public void ProcessMultipleObjects(Point origin, char[,] charList)
         {
             for (int x = 0; x < _screen.Width; x++)
             {

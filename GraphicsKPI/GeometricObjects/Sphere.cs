@@ -37,5 +37,10 @@ namespace GraphicsKPI.GeometricObjects
         {
             return (p - _center).Normalize();
         }
+
+        public override string ToString()
+        {
+            return "Sphere";
+        }
     }
 }
