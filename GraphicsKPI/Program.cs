@@ -8,7 +8,25 @@ namespace GraphicsKPI
     {
         public static void Main(string[] args)
         {
-            Point screenCenter = new Point(-15, 15, -5);
+            string sourceFileName = " ";
+            string outputFileName = " ";
+
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith("--source"))
+                {
+                    sourceFileName = arg.Substring(9);
+                }
+                else
+                {
+                    outputFileName = arg.Substring(9);
+                }
+            }
+
+            Console.WriteLine(sourceFileName);
+            Console.WriteLine(outputFileName);
+
+            /*Point screenCenter = new Point(-15, 15, -5);
             Screen screen = new Screen(screenCenter, 30, 30);
 
             Sphere sphere = new Sphere(new Point(-15, 16, 2), 9);
@@ -29,7 +47,7 @@ namespace GraphicsKPI
             Console.WriteLine(Math.Round(testRay.GetPointByT(t).z, 2));
             //tracer.AddFigureToList(sphere);
             //tracer.AddFigureToList(triangle);
-            //tracer.render();
+            //tracer.render();*/
 
         }
     }
