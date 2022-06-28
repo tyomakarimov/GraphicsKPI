@@ -30,16 +30,25 @@ namespace GraphicsKPI
 
             Color[,] data = new Color[300, 300];
 
-            Color green = new Color(60, 179, 113);
             Color blue = new Color(0, 0, 255);
+            Color bluePurple = new Color(106, 90, 205);
+            Color red = new Color(255, 0, 0);
+            Color green = new Color(0, 255, 0);
 
 
             Sphere sphere = new Sphere(new Point(-70, 20, 2), 60, green);
             Sphere sphere2 = new Sphere(new Point(-10, 10, 4), 10, blue);
-            Light light = new Light(new Vector(70, 80, 60));
+            Light light = new Light(new Vector(30, 80, 40));
             //Light light = new Light(new Vector(2, -3, -1));
-            Camera camera = new Camera(new Point(20, -30, 15));
+            Camera camera = new Camera(new Point(30, 15, 15));
             Triangle triangle = new Triangle(new Point(-10, 5, -2), new Point(-10, 20, -2), new Point(-10, 12, 12));
+
+            Point A = new Point(-70, -50, -20);
+            Point D = new Point(-70, 70 ,-20);
+            Point H = new Point(-80, 50, 100);
+
+            Triangle triangle2 = new Triangle(A, D, H, bluePurple);
+            Sphere sphere3 = new Sphere(new Point(-50, 40, 10), 20, red);
 
             List<Point> vertexes = new List<Point>();
             List<Vector> normals = new List<Vector>();
@@ -65,10 +74,15 @@ namespace GraphicsKPI
                 tracer.AddFigureToList(t);
             }*/
 
+            Matrix matrix = new Matrix();
+            //matrix.Scale(new Vector(2, 2, 2));
+
+            //triangle2.Transform(matrix);
+
+
             Tracer tracer = new Tracer(camera, light, screen);
-            tracer.AddFigureToList(sphere);
-            tracer.AddFigureToList(sphere2);
-            //tracer.AddFigureToList(triangle);
+            tracer.AddFigureToList(triangle2);
+            tracer.AddFigureToList(sphere3);
 
             tracer.render(data);
 

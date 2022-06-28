@@ -1,4 +1,5 @@
 ﻿using GraphicsKPI.Types;
+using GraphicsKPI.Utilities;
 
 
 namespace GraphicsKPI.GeometricObjects
@@ -21,6 +22,13 @@ namespace GraphicsKPI.GeometricObjects
         public Triangle(Point v1, Point v2, Point v3, Color color) : this(v1, v2, v3)
         {
             _color = color;
+        }
+
+        public void Transform(Matrix matrix)
+        {
+            _v1 = matrix.MultiplyPoint(_v1);
+            _v2 = matrix.MultiplyPoint(_v2);
+            _v3 = matrix.MultiplyPoint(_v3);
         }
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
