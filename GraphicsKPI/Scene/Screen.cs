@@ -33,8 +33,8 @@ namespace GraphicsKPI.Scene
 
         public Point GetPointByScreenCoord(int x, int y)
         {
-            double yCoordOfStart = _center.y - (double)_width / 2 + 0.6;
-            double zCoordOfStart = _center.z + (double)_height / 2 - 0.45;
+            double yCoordOfStart = _center.y - (double)_width / 2 + 0.5;
+            double zCoordOfStart = _center.z + (double)_height / 2 - 0.5;
             return new Point(_center.x, yCoordOfStart + y, zCoordOfStart - x);
         }
     }

@@ -11,7 +11,8 @@ namespace GraphicsKPI
             Point screenCenter = new Point(-15, 15, 0);
             Screen screen = new Screen(screenCenter, 30, 30);
 
-            Sphere sphere = new Sphere(new Point(-15, 16, 2), 9);
+            Sphere sphere = new Sphere(new Point(-15, 16, 10), 9);
+            Sphere sphere1 = new Sphere(new Point(-10, 10, 3), 8);
             Light light = new Light(new Vector(38, 15, 60));
             //Light light = new Light(new Vector(2, -3, -1));
             Camera camera = new Camera(new Point(20, 10, 15));
@@ -28,6 +29,7 @@ namespace GraphicsKPI
             //Console.WriteLine(testRay.GetPointByT(t));
             //Console.WriteLine(Math.Round(testRay.GetPointByT(t).z, 2));
             tracer.AddFigureToList(sphere);
+            tracer.AddFigureToList(sphere1);
             //tracer.AddFigureToList(triangle);
             tracer.render();
 
