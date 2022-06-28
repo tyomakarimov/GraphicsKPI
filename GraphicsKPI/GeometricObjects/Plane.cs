@@ -6,6 +6,7 @@ namespace GraphicsKPI.GeometricObjects
     {
         private Point _center;
         private Vector _normal;
+        private Color _color;
 
         public Vector Normal
         {
@@ -17,6 +18,11 @@ namespace GraphicsKPI.GeometricObjects
         {
             _center = point;
             _normal = vector.Normalize();
+        }
+
+        public Plane(Point point, Vector vector, Color color) : this(point, vector)
+        {
+            _color = color;
         }
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
@@ -33,6 +39,11 @@ namespace GraphicsKPI.GeometricObjects
         public Vector GetNormalAtPoint(Point point)
         {
             return _normal;
+        }
+
+        public Color GetColor()
+        {
+            return _color;
         }
     }
 }

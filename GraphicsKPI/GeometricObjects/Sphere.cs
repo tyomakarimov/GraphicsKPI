@@ -14,6 +14,11 @@ namespace GraphicsKPI.GeometricObjects
             _radius = radius;
         }
 
+        public Sphere(Point center, double radius, Color color) : this(center, radius)
+        {
+            _color = color;
+        }
+
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
         {
@@ -36,6 +41,10 @@ namespace GraphicsKPI.GeometricObjects
         public Vector GetNormalAtPoint(Point p)
         {
             return (p - _center).Normalize();
+        }
+        public Color GetColor()
+        {
+            return _color;
         }
 
         public override string ToString()

@@ -18,6 +18,10 @@ namespace GraphicsKPI.GeometricObjects
             _v3 = v3;
         }
 
+        public Triangle(Point v1, Point v2, Point v3, Color color) : this(v1, v2, v3)
+        {
+            _color = color;
+        }
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
         {
@@ -59,6 +63,11 @@ namespace GraphicsKPI.GeometricObjects
             Vector edge1 = _v2 - p;
             Vector edge2 = _v3 - p;
             return edge1.CrossProduct(edge2).Normalize();
+        }
+
+        public Color GetColor()
+        {
+            return _color;
         }
 
         public override string ToString()

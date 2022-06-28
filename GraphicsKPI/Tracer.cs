@@ -28,21 +28,21 @@ namespace GraphicsKPI
             _figureList.Add(figure);
         }
 
-        public Color CalcColor(Vector normal)
+        public Color CalcColor(Vector normal, IFigure obj)
         {
+            var objColor = obj.GetColor();
             var scalarMult = Math.Max(_light.direction.Dot(normal), 0.0);
-            var result = (int)Math.Ceiling(255 * scalarMult);
-            return new Color(result, result, result);
+            var resultR = (int)Math.Ceiling(objColor.r * scalarMult);
+            var resultG = (int)Math.Ceiling(objColor.b * scalarMult);
+            var resultB = (int)Math.Ceiling(objColor.g * scalarMult);
+            return new Color(resultR, resultG, resultB);
         }
         
         public void render(Color[,] matrix)
         {
             Point origin = _camera._location;
 
-            if (_figureList.Count == 1)
-            {
-                ProcessSingleObject(origin, matrix);
-            } else if (_figureList.Count > 1)
+            if (_figureList.Count >= 1)
             {
                 ProcessMultipleObjects(origin, matrix);
             } else
@@ -50,32 +50,21 @@ namespace GraphicsKPI
                 Console.WriteLine("You didn`t add any figures on the scene to render");
                 return;
             }
+            ProcessMultipleObjects(origin, matrix);
         }
 
-        public void ProcessSingleObject(Point origin, Color[,] matrix)
+        public bool IsPixelInShadows(Ray ray, IFigure figure)
         {
-            IFigure obj = _figureList[0];
-            for (int x = 0; x < _screen.Width; x++)
+            foreach (IFigure fig in _figureList)
             {
-                for (int y = 0; y < _screen.Height; y++)
+                if (fig == figure) continue;
+                double t = 0.0;
+                if (figure.CheckIntersectionWith(ray, ref t))
                 {
-                    Point dest = _screen.GetPointByScreenCoord(x, y);
-                    Vector direction = dest - origin;
-                    Ray ray = new Ray(origin, direction);
-
-                    double tval = 0.0;
-                    if (obj.CheckIntersectionWith(ray, ref tval))
-                    {
-                        Point intersectionPoint = ray.GetPointByT(tval);
-                        Vector normal = obj.GetNormalAtPoint(intersectionPoint);
-                        matrix[x, y] = CalcColor(normal);
-                    }
-                    else
-                    {
-                        matrix[x, y] = _backgroundColor;
-                    }
+                    return true;
                 }
             }
+            return false;
         }
 
         public void ProcessMultipleObjects(Point origin, Color[,] matrix)
@@ -109,7 +98,16 @@ namespace GraphicsKPI
                     {
                         Point intersectionPoint = ray.GetPointByT(tval);
                         Vector normal = closestObj.GetNormalAtPoint(intersectionPoint);
-                        matrix[x, y] = CalcColor(normal);
+
+                        Ray reversedRay = new Ray(intersectionPoint + normal, _light.direction);
+                        if (IsPixelInShadows(reversedRay, closestObj))
+                        {
+                            matrix[x, y] = new Color(0, 0, 0);
+                        } else
+                        {
+                            matrix[x, y] = CalcColor(normal, closestObj);
+                        }
+
                     } else
                     {
                         matrix[x, y] = _backgroundColor;

@@ -6,5 +6,6 @@ namespace GraphicsKPI.GeometricObjects
     {
         public bool CheckIntersectionWith(Ray ray, ref double t);
         public Vector GetNormalAtPoint(Point point);
+        public Color GetColor();
     }
 }
