@@ -15,6 +15,7 @@ namespace GraphicsKPI.Utilities
             using (StreamReader reader = new StreamReader(PATH))
             {
                 string? line;
+                int scale = 300;
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
                     if (line.StartsWith("v "))
@@ -25,9 +26,9 @@ namespace GraphicsKPI.Utilities
                         string yCoord = remainYZ.Substring(0, remainYZ.IndexOf(' '));
                         string zCoord = remainYZ.Substring(remainYZ.IndexOf(' ') + 1);
                         Point point = new Point(
-                            double.Parse(xCoord, CultureInfo.InvariantCulture), 
-                            double.Parse(yCoord, CultureInfo.InvariantCulture), 
-                            double.Parse(zCoord, CultureInfo.InvariantCulture));
+                            double.Parse(xCoord, CultureInfo.InvariantCulture) * scale,
+                            double.Parse(yCoord, CultureInfo.InvariantCulture) * scale,
+                            double.Parse(zCoord, CultureInfo.InvariantCulture) * scale);
                         vertexes.Add(point);
                     }
                     else if (line.StartsWith("vn "))
@@ -38,9 +39,9 @@ namespace GraphicsKPI.Utilities
                         string yCoord = remainYZ.Substring(0, remainYZ.IndexOf(' '));
                         string zCoord = remainYZ.Substring(remainYZ.IndexOf(' ') + 1);
                         Vector norm = new Vector(
-                            double.Parse(xCoord, CultureInfo.InvariantCulture),
-                            double.Parse(yCoord, CultureInfo.InvariantCulture),
-                            double.Parse(zCoord, CultureInfo.InvariantCulture));
+                            double.Parse(xCoord, CultureInfo.InvariantCulture) * scale,
+                            double.Parse(yCoord, CultureInfo.InvariantCulture) * scale,
+                            double.Parse(zCoord, CultureInfo.InvariantCulture) * scale);
                         normals.Add(norm);
                     }
                     else if (line.StartsWith("f "))

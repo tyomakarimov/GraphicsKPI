@@ -25,7 +25,7 @@ namespace GraphicsKPI
             }
 
 
-            Point screenCenter = new Point(-15, 15, 7);
+            Point screenCenter = new Point(40, 10, 4);
             Screen screen = new Screen(screenCenter, 300, 300);
 
             Color[,] data = new Color[300, 300];
@@ -34,13 +34,14 @@ namespace GraphicsKPI
             Color bluePurple = new Color(106, 90, 205);
             Color red = new Color(255, 0, 0);
             Color green = new Color(0, 255, 0);
+            Color gray = new Color(169, 169, 169);
 
 
-            Sphere sphere = new Sphere(new Point(-70, 20, 2), 60, green);
-            Sphere sphere2 = new Sphere(new Point(-10, 10, 4), 10, blue);
-            Light light = new Light(new Vector(30, 80, 40));
+            Sphere sphere = new Sphere(new Point(-150, -20, 2), 80, gray);
+            Sphere sphere2 = new Sphere(new Point(30, 100, 10), 30, red);
+            Light light = new Light(new Vector(120, 120, 70));
             //Light light = new Light(new Vector(2, -3, -1));
-            Camera camera = new Camera(new Point(30, 15, 15));
+            Camera camera = new Camera(new Point(2500, 10, 6));
             Triangle triangle = new Triangle(new Point(-10, 5, -2), new Point(-10, 20, -2), new Point(-10, 12, 12));
 
             Point A = new Point(-70, -50, -20);
@@ -58,32 +59,37 @@ namespace GraphicsKPI
 
             //ObjFileParser.ParseObjFile(sourceFileName, vertexes, normals, triangleIndexes).Wait();
 
-            /*for (int i = 0; i < 10; i++)
-            {
-                int indexV1 = triangleIndexes[i][0].Item1 - 1;
-                int indexV2 = triangleIndexes[i][1].Item1 - 1;
-                int indexV3 = triangleIndexes[i][2].Item1 - 1;
-                Triangle tria = new Triangle(vertexes[indexV1], vertexes[indexV2], vertexes[indexV3]);
-                triangles.Add(tria);
-            }
+            Matrix matrix = new Matrix();
+            matrix.RotateX(45);
 
+            /*foreach (List<(int, int)> indexes in triangleIndexes)
+            {
+                int indexV1 = indexes[0].Item1 - 1;
+                int indexV2 = indexes[1].Item1 - 1;
+                int indexV3 = indexes[2].Item1 - 1;
+
+                /*int indexN1 = indexes[0].Item2 - 1;
+                int indexN2 = indexes[1].Item2 - 1;
+                int indexN3 = indexes[2].Item2 - 1;
+                Triangle tria = new Triangle(vertexes[indexV1], vertexes[indexV2], vertexes[indexV3], 
+                    normals[indexN1], normals[indexN2], normals[indexN3]);*/
+                /*Triangle tria = new Triangle(vertexes[indexV1], vertexes[indexV2], vertexes[indexV3], gray);
+                tria.Transform(matrix);
+                triangles.Add(tria);
+            }*/
+              
             Tracer tracer = new Tracer(camera, light, screen);
 
-            foreach (Triangle t in triangles)
+            /*foreach (Triangle t in triangles)
             {
                 tracer.AddFigureToList(t);
             }*/
 
-            Matrix matrix = new Matrix();
-            //matrix.Scale(new Vector(2, 2, 2));
 
             //triangle2.Transform(matrix);
 
-
-            Tracer tracer = new Tracer(camera, light, screen);
-            tracer.AddFigureToList(triangle2);
-            tracer.AddFigureToList(sphere3);
-
+            tracer.AddFigureToList(sphere);
+            tracer.AddFigureToList(sphere2);
             tracer.render(data);
 
 

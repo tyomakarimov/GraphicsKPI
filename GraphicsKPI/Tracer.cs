@@ -53,18 +53,34 @@ namespace GraphicsKPI
             ProcessMultipleObjects(origin, matrix);
         }
 
-        public bool IsPixelInShadows(Ray ray, IFigure figure)
+        public bool RayHasAnyCross(Ray ray)
         {
-            foreach (IFigure fig in _figureList)
+            double t = 0.0;
+            foreach (IFigure obj in _figureList)
             {
-                if (fig == figure) continue;
-                double t = 0.0;
-                if (figure.CheckIntersectionWith(ray, ref t))
+                if (obj.CheckIntersectionWith(ray, ref t))
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public Color FindShade(Vector normal, Point intersectionPoint, IFigure closest)
+        {
+            Point point = intersectionPoint + normal.MultiplyBy(0.001f);
+            Ray ray = new Ray(point, _light.direction);
+
+            double scalarMult = Math.Max(_light.direction.Dot(normal), 0.0);
+            if (scalarMult > 0.0 && RayHasAnyCross(ray))
+            {
+                return new Color(0, 0, 0);
+            }
+            Color objColor = closest.GetColor();
+            var resultR = (int)Math.Ceiling(objColor.r * scalarMult);
+            var resultG = (int)Math.Ceiling(objColor.b * scalarMult);
+            var resultB = (int)Math.Ceiling(objColor.g * scalarMult);
+            return new Color(resultR, resultG, resultB);
         }
 
         public void ProcessMultipleObjects(Point origin, Color[,] matrix)
@@ -94,23 +110,14 @@ namespace GraphicsKPI
                         }
                     }
 
-                    if (closestObj is not null)
+                    if (closestObj is null)
+                    {
+                        matrix[x, y] = _backgroundColor;
+                    } else
                     {
                         Point intersectionPoint = ray.GetPointByT(tval);
                         Vector normal = closestObj.GetNormalAtPoint(intersectionPoint);
-
-                        Ray reversedRay = new Ray(intersectionPoint + normal, _light.direction);
-                        if (IsPixelInShadows(reversedRay, closestObj))
-                        {
-                            matrix[x, y] = new Color(0, 0, 0);
-                        } else
-                        {
-                            matrix[x, y] = CalcColor(normal, closestObj);
-                        }
-
-                    } else
-                    {
-                        matrix[x, y] = _backgroundColor;
+                        matrix[x, y] = FindShade(normal, intersectionPoint, closestObj);
                     }
 
                 }

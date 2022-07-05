@@ -9,6 +9,10 @@ namespace GraphicsKPI.GeometricObjects
         private Point _v1;
         private Point _v2;
         private Point _v3;
+        private Vector _n1;
+        private Vector _n2;
+        private Vector _n3;
+
         private Color _color;
         private double EPSILON = 0.0000001;
 
@@ -22,6 +26,14 @@ namespace GraphicsKPI.GeometricObjects
         public Triangle(Point v1, Point v2, Point v3, Color color) : this(v1, v2, v3)
         {
             _color = color;
+        }
+
+        public Triangle(Point v1, Point v2, Point v3, Vector n1, Vector n2, Vector n3) : this(v1, v2, v3)
+        {
+            _n1 = n1;
+            _n2 = n2;
+            _n3 = n3;
+            _color = new Color(255, 0, 0);
         }
 
         public void Transform(Matrix matrix)
@@ -80,7 +92,7 @@ namespace GraphicsKPI.GeometricObjects
 
         public override string ToString()
         {
-            return "Triangle";
+            return "Triangle:" + "v1: " + _v1 + "v2: " + _v2 + "v3: " + _v3;
         }
 
     }
