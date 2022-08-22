@@ -8,6 +8,9 @@ namespace GraphicsKPI.GeometricObjects
         private Point _v1;
         private Point _v2;
         private Point _v3;
+        private Vector _normal1;
+        private Vector _normal2;
+        private Vector _normal3;
         private Color _color;
         private double EPSILON = 0.0000001;
 
@@ -17,7 +20,17 @@ namespace GraphicsKPI.GeometricObjects
             _v2 = v2;
             _v3 = v3;
         }
-
+        
+        public Triangle(Point v1, Point v2, Point v3, Vector n1, Vector n2, Vector n3)
+        {
+            _v1 = v1;
+            _v2 = v2;
+            _v3 = v3;
+            _normal1 = n1;
+            _normal2 = n2;
+            _normal3 = n3;
+            _color = new Color(153, 255, 204);
+        }
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
         {

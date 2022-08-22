@@ -16,23 +16,12 @@ namespace GraphicsKPI
             var screen = new Screen(screenCenter, height, width);
             
             var colors = new Color[height, width];
-
-            var sphere1 = new Sphere(new Point(-150, 0, 2), 80, new Color(179, 255, 255));
-            var sphere2 = new Sphere(new Point(30, 100, 10), 30, new Color(153, 255, 204));
-            var sphere3 = new Sphere(new Point(-30, -80, 60), 50, new Color(255, 204, 204));
             
             var light = new Light(new Vector(120, 120, 70));
             var camera = new Camera(new Point(1800, 10, -18));
 
-            var tracer = new Tracer(camera, light, screen);
-
-            tracer.AddFigureToList(sphere1);
-            tracer.AddFigureToList(sphere2);
-            tracer.AddFigureToList(sphere3);
-
-            tracer.Render(colors);
-            
             var outputFile = "";
+            var inputFile = " ";
 
             foreach (var arg in args)
             {
@@ -40,7 +29,44 @@ namespace GraphicsKPI
                 {
                     outputFile = arg[9..arg.Length];
                 }
+
+                if (arg.StartsWith("--source"))
+                {
+                    inputFile = arg[9..arg.Length];
+                }
             }
+            
+            var points = new List<Point>();
+            var normals = new List<Vector>();
+            var triangles = new List<Triangle>();
+
+            var triangleIndexes = new List<List<(int, int)>>();
+
+            ObjReader.ReadFromFile(inputFile, points, normals, triangleIndexes).Wait();
+            
+            foreach (var indexes in triangleIndexes)
+            {
+                var (firstVertexIndex, firstVertexNormal) = indexes[0];
+                var (secondVertexIndex, secondVertexNormal) = indexes[1];
+                var (thirdVertexIndex, thirdVertexNormal) = indexes[2];
+
+                var triangle = new Triangle(points[firstVertexIndex - 1], 
+                    points[secondVertexIndex - 1],
+                    points[thirdVertexIndex - 1], 
+                    normals[firstVertexNormal - 1],
+                    normals[secondVertexNormal - 1],
+                    normals[thirdVertexNormal - 1]);
+                triangles.Add(triangle);
+            }
+            
+            var tracer = new Tracer(camera, light, screen);
+
+            foreach (var triangle in triangles)
+            {
+                tracer.AddFigureToList(triangle);
+            }
+
+            tracer.Render(colors);
             
             PpmWriter.WriteToFile(outputFile, colors).Wait();
         }
