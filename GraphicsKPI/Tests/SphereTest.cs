@@ -17,7 +17,7 @@ namespace GraphicsKPI.Tests
         public void Setup()
         {
             _origin = new Point(20, 10, 15);
-            _sphere = new Sphere(new Point(-15, 16, 2), 9);
+            _sphere = new Sphere(new Point(-15, 16, 2), 9, new Color(169, 169, 169));
         }
 
         [Test]

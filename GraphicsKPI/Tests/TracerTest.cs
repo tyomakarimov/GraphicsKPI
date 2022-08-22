@@ -28,24 +28,9 @@ namespace GraphicsKPI.Tests
         }
 
         [Test]
-        public void TraceSingleObject()
-        {
-            Sphere sphere = new Sphere(new Point(-40, 20, 2), 12);
-            Tracer tracer = new Tracer(_camera, _light, _screen);
-            tracer.AddFigureToList(sphere);
-
-
-            char[,] charList = new char[_screen.Width, _screen.Height];
-            tracer.ProcessSingleObject(_origin, charList);
-
-            Assert.AreEqual(charList[14, 14], 'O');
-
-        }
-
-        [Test]
         public void TraceMultipleObjects()
         {
-            Sphere sphere = new Sphere(new Point(-40, 20, 2), 12);
+            Sphere sphere = new Sphere(new Point(-40, 20, 2), 12, new Color(169, 169, 169));
             Point D = new Point(-25, 22, 10);
             Point C = new Point(-20, 30, -5);
             Point E = new Point(-20, 0, 0);

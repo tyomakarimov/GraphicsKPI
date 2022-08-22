@@ -4,24 +4,25 @@ namespace GraphicsKPI.GeometricObjects
 {
     internal class Sphere : IFigure
     {
-        private Point _center;
-        private double _radius;
-        private Color _color;
+        private readonly Point center;
+        private readonly double radius;
+        private readonly Color color;
 
-        public Sphere(Point center, double radius)
+        public Sphere(Point center, double radius, Color color)
         {
-            _center = center;
-            _radius = radius;
+            this.center = center;
+            this.radius = radius;
+            this.color = color;
         }
 
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
         {
             t = 0;
-            var k = ray.origin - _center;
+            var k = ray.origin - center;
             var b = ray.direction.Dot(k);
             var kAbs = k.abs;
-            var Discriminant = 4 * (Math.Pow(b, 2) - Math.Pow(kAbs, 2) + Math.Pow(_radius, 2));
+            var Discriminant = 4 * (Math.Pow(b, 2) - Math.Pow(kAbs, 2) + Math.Pow(radius, 2));
 
             if (Discriminant < 0) return false;
 
@@ -35,7 +36,12 @@ namespace GraphicsKPI.GeometricObjects
         }
         public Vector GetNormalAtPoint(Point p)
         {
-            return (p - _center).Normalize();
+            return (p - center).Normalize();
+        }
+
+        public Color GetColor()
+        {
+            return color;
         }
 
         public override string ToString()

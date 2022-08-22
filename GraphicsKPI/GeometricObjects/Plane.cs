@@ -6,6 +6,7 @@ namespace GraphicsKPI.GeometricObjects
     {
         private Point _center;
         private Vector _normal;
+        private Color _color;
 
         public Vector Normal
         {
@@ -33,6 +34,11 @@ namespace GraphicsKPI.GeometricObjects
         public Vector GetNormalAtPoint(Point point)
         {
             return _normal;
+        }
+        
+        public Color GetColor()
+        {
+            return _color;
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using GraphicsKPI.Types;
 using GraphicsKPI.GeometricObjects;
 using GraphicsKPI.Scene;
-using System.Collections.Generic;
-
 
 namespace GraphicsKPI
 {
@@ -20,6 +18,7 @@ namespace GraphicsKPI
             _light = light;
             _screen = screen;
             _figureList = new List<IFigure>();
+            _backgroundColor = new Color(255, 255, 204);
         }
 
         public void AddFigureToList(IFigure figure)
@@ -27,122 +26,51 @@ namespace GraphicsKPI
             _figureList.Add(figure);
         }
 
-        public char CalcCharacter(Vector normal)
+        public void Render(Color[,] colors)
         {
-            var result = _light.direction.Dot(normal);
-            char character;
-            if (result > 0.8f)
+            var origin = _camera._location;
+
+            if (_figureList.Count >= 1)
             {
-                character = '#';
-            } else if (result > 0.5f)
-            {
-                character = 'O';
-            } else if (result > 0.2f)
-            {
-                character = '*';
-            } else if (result > 0f)
-            {
-                character = '.';
+                ProcessMultipleObjects(origin, colors);
             } else
             {
-                character = ' ';
-            };
-            return character;
-        }
-        
-        public void render()
-        {
-            Point origin = _camera._location;
-            char[,] charList = new char[_screen.Width, _screen.Height];
-
-            if (_figureList.Count == 1)
-            {
-                ProcessSingleObject(origin, charList);
-            } else if (_figureList.Count > 1)
-            {
-                ProcessMultipleObjects(origin, charList);
-            } else
-            {
-                Console.WriteLine("You didn`t add any figures on the scene to render");
-                return;
-            }
-
-            for (int x = 0; x < _screen.Width; x++)
-            {
-                for (int y = 0; y < _screen.Height; y++)
-                {
-                    Console.Write(charList[x, y] + " ");
-                }
-                Console.Write("\n");
+                Console.WriteLine("At least one figure should be added");
             }
         }
 
-        public void ProcessSingleObject(Point origin, char[,] charList)
+        private void ProcessMultipleObjects(Point origin, Color[,] colors)
         {
-            IFigure obj = _figureList[0];
-            for (int x = 0; x < _screen.Width; x++)
+            for (var x = 0; x < _screen.Width; x++)
             {
-                for (int y = 0; y < _screen.Height; y++)
+                for (var y = 0; y < _screen.Height; y++)
                 {
-                    Point dest = _screen.GetPointByScreenCoord(x, y);
-                    Vector direction = dest - origin;
-                    Ray ray = new Ray(origin, direction);
+                    var dest = _screen.GetPointByScreenCoord(x, y);
+                    var direction = dest - origin;
+                    var ray = new Ray(origin, direction);
 
-                    double tval = 0.0;
-                    if (obj.CheckIntersectionWith(ray, ref tval))
-                    {
-                        Point intersectionPoint = ray.GetPointByT(tval);
-                        Vector normal = obj.GetNormalAtPoint(intersectionPoint);
-                        charList[x, y] = CalcCharacter(normal);
-                    }
-                    else
-                    {
-                        charList[x, y] = '-';
-                    }
-                }
-            }
-        }
-
-        public void ProcessMultipleObjects(Point origin, char[,] charList)
-        {
-            for (int x = 0; x < _screen.Width; x++)
-            {
-                for (int y = 0; y < _screen.Height; y++)
-                {
-
-                    Point dest = _screen.GetPointByScreenCoord(x, y);
-                    Vector direction = dest - origin;
-                    Ray ray = new Ray(origin, direction);
-
-                    double tval = double.MaxValue;
+                    var tval = double.MaxValue;
                     IFigure closestObj = null;
 
-                    for (int i = 0; i < _figureList.Count(); i++)
+                    foreach (var figure in _figureList)
                     {
-                        double temptval = 0.0;
-                        if (_figureList[i].CheckIntersectionWith(ray, ref temptval))
+                        var temptval = 0.0;
+                        if (figure.CheckIntersectionWith(ray, ref temptval) && temptval < tval)
                         {
-                            if (temptval < tval)
-                            {
-                                tval = temptval;
-                                closestObj = _figureList[i];
-                            }
+                            tval = temptval;
+                            closestObj = figure;
                         }
                     }
 
                     if (closestObj is not null)
                     {
-                        Point intersectionPoint = ray.GetPointByT(tval);
-                        Vector normal = closestObj.GetNormalAtPoint(intersectionPoint);
-                        charList[x, y] = CalcCharacter(normal);
+                        colors[x, y] = closestObj.GetColor();
                     } else
                     {
-                        charList[x, y] = '-';
+                        colors[x, y] = _backgroundColor;
                     }
-
                 }
             }
         }
-
     }
 }
