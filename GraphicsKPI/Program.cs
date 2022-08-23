@@ -44,6 +44,11 @@ namespace GraphicsKPI
 
             ObjReader.ReadFromFile(inputFile, points, normals, triangleIndexes).Wait();
             
+            var matrix = new Matrix();
+            matrix.Translate(new Vector(15, 15, 0));
+            matrix.RotateX(70);
+            matrix.Scale(new Vector(0.9, 0.9, 0.9));
+            
             foreach (var indexes in triangleIndexes)
             {
                 var (firstVertexIndex, firstVertexNormal) = indexes[0];
@@ -56,6 +61,7 @@ namespace GraphicsKPI
                     normals[firstVertexNormal - 1],
                     normals[secondVertexNormal - 1],
                     normals[thirdVertexNormal - 1]);
+                triangle.Transform(matrix);
                 triangles.Add(triangle);
             }
             

@@ -1,5 +1,5 @@
 ﻿using GraphicsKPI.Types;
-
+using GraphicsKPI.Utils;
 
 namespace GraphicsKPI.GeometricObjects
 {
@@ -77,6 +77,13 @@ namespace GraphicsKPI.GeometricObjects
         public Color GetColor()
         {
             return _color;
+        }
+        
+        public void Transform(Matrix matrix)
+        {
+            _v1 = matrix.MultiplyPoint(_v1);
+            _v2 = matrix.MultiplyPoint(_v2);
+            _v3 = matrix.MultiplyPoint(_v3);
         }
 
         public override string ToString()
