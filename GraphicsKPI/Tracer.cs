@@ -1,6 +1,7 @@
 ﻿using GraphicsKPI.Types;
 using GraphicsKPI.GeometricObjects;
 using GraphicsKPI.Scene;
+using GraphicsKPI.Utils;
 
 namespace GraphicsKPI
 {
@@ -64,7 +65,9 @@ namespace GraphicsKPI
 
                     if (closestObj is not null)
                     {
-                        colors[x, y] = closestObj.GetColor();
+                        var point = ray.GetPointByT(tval);
+                        var normal = closestObj.GetNormalAtPoint(point);
+                        colors[x, y] = Shade.GetColorWithShade(normal, point, closestObj, _light, _figureList);
                     } else
                     {
                         colors[x, y] = _backgroundColor;
