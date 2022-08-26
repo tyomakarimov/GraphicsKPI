@@ -1,4 +1,5 @@
 ﻿using GraphicsKPI.Types;
+using GraphicsKPI.Utils;
 
 namespace GraphicsKPI.GeometricObjects
 {
@@ -8,5 +9,7 @@ namespace GraphicsKPI.GeometricObjects
         public Vector GetNormalAtPoint(Point point);
         
         public Color GetColor();
+
+        public void Transform(Matrix matrix);
     }
 }

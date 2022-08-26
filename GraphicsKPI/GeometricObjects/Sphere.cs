@@ -1,11 +1,12 @@
 ﻿using GraphicsKPI.Types;
+using GraphicsKPI.Utils;
 
 namespace GraphicsKPI.GeometricObjects
 {
     internal class Sphere : IFigure
     {
-        private readonly Point center;
-        private readonly double radius;
+        private Point center;
+        private double radius;
         private readonly Color color;
 
         public Sphere(Point center, double radius, Color color)
@@ -42,6 +43,12 @@ namespace GraphicsKPI.GeometricObjects
         public Color GetColor()
         {
             return color;
+        }
+        
+        public void Transform(Matrix matrix)
+        {
+            center = matrix.MultiplyPoint(center);
+            radius *= Vector.Min(matrix.GetScaleVector());
         }
 
         public override string ToString()

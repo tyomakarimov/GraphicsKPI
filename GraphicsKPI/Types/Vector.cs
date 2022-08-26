@@ -15,7 +15,6 @@
             abs = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
         }
 
-
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
@@ -54,6 +53,11 @@
         public Vector Normalize()
         {
             return new Vector(x / abs, y / abs, z / abs);
+        }
+
+        public static double Min(Vector vector)
+        {
+            return Math.Min(vector.x, Math.Min(vector.y, vector.z));
         }
 
         public override string ToString()

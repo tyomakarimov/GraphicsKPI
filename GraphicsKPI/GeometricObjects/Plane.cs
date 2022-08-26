@@ -1,4 +1,5 @@
 ﻿using GraphicsKPI.Types;
+using GraphicsKPI.Utils;
 
 namespace GraphicsKPI.GeometricObjects
 {
@@ -18,6 +19,7 @@ namespace GraphicsKPI.GeometricObjects
         {
             _center = point;
             _normal = vector.Normalize();
+            _color = new Color(0, 255, 0);
         }
 
         public bool CheckIntersectionWith(Ray ray, ref double t)
@@ -39,6 +41,12 @@ namespace GraphicsKPI.GeometricObjects
         public Color GetColor()
         {
             return _color;
+        }
+
+        public void Transform(Matrix matrix)
+        {
+            _center = matrix.MultiplyPoint(_center);
+            _normal = matrix.MultiplyVector(_normal);
         }
     }
 }

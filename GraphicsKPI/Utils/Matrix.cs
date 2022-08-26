@@ -168,5 +168,14 @@ namespace GraphicsKPI.Utils
             }
             return new Point(result[0], result[1], result[2]);
         }
+
+        public Vector GetScaleVector()
+        {
+            return new Vector(
+                new Vector(_matrix[0, 0], _matrix[0, 1], _matrix[0, 2]).abs,
+                new Vector(_matrix[1, 0], _matrix[1, 1], _matrix[1, 2]).abs,
+                new Vector(_matrix[2, 0], _matrix[2, 1], _matrix[2, 2]).abs
+            );
+        }
     }
 }

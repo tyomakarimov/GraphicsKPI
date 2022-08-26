@@ -35,45 +35,27 @@ namespace GraphicsKPI
                     inputFile = arg[9..arg.Length];
                 }
             }
-            
-            var points = new List<Point>();
-            var normals = new List<Vector>();
-            var triangles = new List<Triangle>();
 
-            var triangleIndexes = new List<List<(int, int)>>();
-
-            ObjReader.ReadFromFile(inputFile, points, normals, triangleIndexes).Wait();
-            
             var matrix = new Matrix();
-            matrix.Translate(new Vector(15, 15, 0));
-            matrix.RotateX(70);
-            matrix.Scale(new Vector(0.9, 0.9, 0.9));
-            
-            foreach (var indexes in triangleIndexes)
-            {
-                var (firstVertexIndex, firstVertexNormal) = indexes[0];
-                var (secondVertexIndex, secondVertexNormal) = indexes[1];
-                var (thirdVertexIndex, thirdVertexNormal) = indexes[2];
+            matrix.Translate(new Vector(10, 10, 10));
+            //matrix.RotateX(70);
+            matrix.Scale(new Vector(1.2, 1.2, 1.2));
 
-                var triangle = new Triangle(points[firstVertexIndex - 1], 
-                    points[secondVertexIndex - 1],
-                    points[thirdVertexIndex - 1], 
-                    normals[firstVertexNormal - 1],
-                    normals[secondVertexNormal - 1],
-                    normals[thirdVertexNormal - 1]);
-                triangle.Transform(matrix);
-                triangles.Add(triangle);
-            }
-            
             var tracer = new Tracer(camera, light, screen);
 
-            foreach (var triangle in triangles)
-            {
-                tracer.AddFigureToList(triangle);
-            }
+            var sphere1 = new Sphere(new Point(-150, 0, 2), 80, new Color(179, 255, 255));
+
+            // var plane = new Plane(new Point(-180, 100, 10), new Vector(0, 15, 0));
+            
+            // plane.Transform(matrix);
+            
+            sphere1.Transform(matrix);
+            
+            tracer.AddFigureToList(sphere1);
+            // tracer.AddFigureToList(plane);
 
             tracer.Render(colors);
-            
+
             PpmWriter.WriteToFile(outputFile, colors).Wait();
         }
     }
